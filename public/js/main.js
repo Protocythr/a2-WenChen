@@ -21,6 +21,8 @@ const submit = async function( event ) {
   console.log( 'text:', text )
 }
 
+
+
 window.onload = function() {
   const button = document.querySelector('button')
   button.onclick = submit

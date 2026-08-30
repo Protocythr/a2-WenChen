@@ -1,4 +1,89 @@
 body {
-  background:black;
-  color:white;
+  all: unset;
+  background: #ead3b2;
+}
+
+.enlistment_menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #ca9c77;
+  color: #110d05;
+  width: 60dvw;
+  margin-left: auto;
+  margin-right: auto;
+  height: 40vh;
+  padding-bottom: 20vh;
+  align-content: center;
+  border-radius: 15px;
+  h1 {
+    width: fit-content;
+    align-self: center;
+    font-size: 4rem;
+    font-family: 'Times New Roman', Times, serif;
+  }
+  .login_info {
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
+    align-self: center;
+    input {
+      border: none;
+      height: 5vh;
+      width: 30vw;
+      background: #9e8765;
+      margin-right: 40px;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    input::placeholder {
+      color: white;
+      font-size: 16px;
+      font-weight: 400;
+      font-family: Arial, sans-serif;
+      opacity: 1;
+    }
+    button {
+      color: white;
+      border: none;
+      background: red;
+      padding: 10px;
+      border-radius: 40px;
+    }
+  }
+}
+
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #e18c5b;
+  color: white;
+  text-align: center;
+}
+
+nav{
+  all: unset;
+  width: 100%;
+  ul {
+    all: unset;
+    height: 7vh;
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    justify-content: center;
+    margin-bottom: 3em;
+    li{
+      margin: 0 10px;
+      padding: 10px;
+      width: 30vw;
+      justify-content: center;
+      align-content: center;
+      text-align: center;
+      background: #a1855a;
+      border-bottom-right-radius: 40px;
+      border-bottom-left-radius: 40px;
+    }
+  }
 }
