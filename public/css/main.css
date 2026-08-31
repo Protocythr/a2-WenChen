@@ -1,5 +1,8 @@
 body {
   all: unset;
+}
+
+.enlistment_page{
   background: #ead3b2;
 }
 
@@ -35,6 +38,8 @@ body {
       margin-right: 40px;
       padding: 10px;
       border-radius: 5px;
+      text-align: center;
+      font-size: 2rem;
     }
     input::placeholder {
       color: white;
@@ -75,6 +80,8 @@ nav{
     justify-content: center;
     margin-bottom: 3em;
     li{
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 2rem;
       margin: 0 10px;
       padding: 10px;
       width: 30vw;

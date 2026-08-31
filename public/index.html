@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang='en'>
   <head>
-    <title>CS4241 Assignment 2</title>
+    <title>Enlistment Page</title>
     <meta charset='utf-8' />
     <script src='js/main.js'></script>
     <link rel='stylesheet' href='css/main.css' />
@@ -9,7 +9,7 @@
     <!-- get rid of favicon error -->
     <link rel='icon' href='data:;base64,iVBORw0KGgo=' />
   </head>
-  <body>
+  <body class="enlistment_page">
     <nav>
       <ul>
         <li>Enlistment</li>
@@ -17,11 +17,11 @@
         <li>Achievements</li>
       </ul>
     </nav>
-    <form class="enlistment_menu">
+    <form class="enlistment_menu" method="POST" action="/enlist">
       <h1>Register Your Name Soldier:</h1>
       <div class="login_info">
-        <input type='text' id='your_name' placeholder="Your Honorable Name:" value=''>
-        <button class="enlist_button">Enlist!</button>
+        <input type='text' id='enlistee_name' placeholder="" value=''>
+        <button class="enlist_button" type="submit">Enlist!</button>
       </div>
     </form>
   <footer>this is a footer</footer>

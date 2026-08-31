@@ -40,6 +40,10 @@ const handlePost = function( request, response ) {
 
   request.on( 'end', function() {
     console.log( JSON.parse( dataString ) )
+    if( request.url === '/enlist' ) {
+      const data = JSON.parse( dataString )
+      let enlistee_name = data[ 'enlistee_name' ]
+    }
     // ... do something with the data here!!!
 
     response.writeHead( 200, "OK", {'Content-Type': 'text/plain' })
