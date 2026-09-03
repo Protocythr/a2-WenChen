@@ -8,9 +8,7 @@ const http = require( 'http' ),
       port = 3000
 
 const appdata = [
-  { 'model': 'toyota', 'year': 1999, 'mpg': 23 },
-  { 'model': 'honda', 'year': 2004, 'mpg': 30 },
-  { 'model': 'ford', 'year': 1987, 'mpg': 14} 
+  { 'name': 'DEV', 'score': 0, 'date':  '09/02/2026'},
 ]
 
 const server = http.createServer( function( request,response ) {
@@ -22,11 +20,19 @@ const server = http.createServer( function( request,response ) {
 })
 
 const handleGet = function( request, response ) {
-  const filename = dir + request.url.slice( 1 ) 
+  const filename = dir + request.url.slice( 1 )
+
+    if (request.url === '/achievements') {
+    response.writeHead(200, { 'Content-Type': 'application/json' });
+    response.end(JSON.stringify(appdata));
+    return;
+  }
 
   if( request.url === '/' ) {
     sendFile( response, 'public/index.html' )
-  }else{
+  }else if (request.url === '/leaderboard'){
+    sendFile( response, 'public/leaderboard.html' )
+  }else {
     sendFile( response, filename )
   }
 }
@@ -43,6 +49,8 @@ const handlePost = function( request, response ) {
     if( request.url === '/enlist' ) {
       const data = JSON.parse( dataString )
       let enlistee_name = data[ 'enlistee_name' ]
+      const today = new Date();
+      appdata.push( {'name': enlistee_name, 'score':0, 'date': (today.getMonth()+1)+'/'+today.getDate()+'/'+today.getFullYear()} )
     }
     // ... do something with the data here!!!
 

@@ -7,11 +7,12 @@ const submit = async function( event ) {
   // remains to this day
   event.preventDefault()
   
-  const input = document.querySelector( '#yourname' ),
-        json = { yourname: input.value },
+  const input = document.querySelector( '#enlistee_name' ),
+        json = { enlistee_name: input.value },
         body = JSON.stringify( json )
 
-  const response = await fetch( '/submit', {
+  document.getElementById( 'enlistee_name' ).value = "";
+  const response = await fetch( '/enlist', {
     method:'POST',
     body 
   })
@@ -20,8 +21,6 @@ const submit = async function( event ) {
 
   console.log( 'text:', text )
 }
-
-
 
 window.onload = function() {
   const button = document.querySelector('button')
