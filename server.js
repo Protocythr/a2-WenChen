@@ -32,6 +32,8 @@ const handleGet = function( request, response ) {
     sendFile( response, 'public/index.html' )
   }else if (request.url === '/leaderboard'){
     sendFile( response, 'public/leaderboard.html' )
+  }else if (request.url === '/game_page/'){
+    sendFile( response, 'public/game_page.html' )
   }else {
     sendFile( response, filename )
   }
@@ -78,6 +80,7 @@ const sendFile = function( response, filename ) {
        // file not found, error code 404
        response.writeHeader( 404 )
        response.end( '404 Error: File Not Found' )
+       console.log("Name: "+filename)
 
      }
    })

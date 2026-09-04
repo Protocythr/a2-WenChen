@@ -1,0 +1,14 @@
+.background{
+    background-repeat: no-repeat;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    display: flex;
+    img {
+        margin-left: auto;
+        margin-right: auto;
+        height: 100vh;
+        width: auto;
+        display: block;
+    }
+}

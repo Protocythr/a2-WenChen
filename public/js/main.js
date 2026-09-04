@@ -20,6 +20,7 @@ const submit = async function( event ) {
   const text = await response.text()
 
   console.log( 'text:', text )
+  window.location.href = '/game_page/';
 }
 
 window.onload = function() {
