@@ -14,8 +14,22 @@
 
         </div>
     </div>
-    <div class="attack_menu">
-        <form action="/attack"></form>
+    <div class="attack_menu" style='z-index: 99; position: absolute;'>
+        <form action="/attack">
+            <fieldset>
+                <legend>Select Explosive Strength</legend>
+                <label><input type="radio" name="explosive_strength" value="1" checked="checked">1</label>
+                <label><input type="radio" name="explosive_strength" value="2">2</label>
+                <label><input type="radio" name="explosive_strength" value="2">3</label>
+                <label><input type="radio" name="explosive_strength" value="2">4</label>
+                <label><input type="radio" name="explosive_strength" value="2">5</label>
+            </fieldset>
+            <fieldset>
+                <legend id="bearing_angle_display">Bearing Angle: 0</legend>
+                <input type="range" id="rotation" name="rotation" min="0" max="360" value="0" step="0.01">
+                <button class="bearing_angle_button" id="bearing_button_left"><</button><button class="bearing_angle_button" id="bearing_button_right">></button>
+            </fieldset>
+        </form>
     </div>
 </body>
 </html>
