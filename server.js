@@ -86,4 +86,23 @@ const sendFile = function( response, filename ) {
    })
 }
 
+function calculateDistance (explosive_tier, angle) {
+  let explosive_force = 0;
+  let gravity = 9.8
+  switch(explosive_tier) {
+    case '1':
+      explosive_force = 30;
+    case '2':
+      explosive_force = 60;
+    case '3':
+      explosive_force = 90;
+    case '4':
+      explosive_force = 120;
+    case '5':
+      explosive_force = 160;
+  }
+  let radians = angle * (Math.PI / 180)
+  return ((explosive_force * explosive_force) * Math.sin(radians)) / gravity;
+}
+
 server.listen( process.env.PORT || port )
