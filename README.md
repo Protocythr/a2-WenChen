@@ -56,8 +56,8 @@ Do the following to complete this assignment and achieve a base grade of 85%:
 1. Fork the starting project code. This repo contains some starter code that may be used or discarded as needed.
 2. Implement your project with the above requirements.
 3. Test your project to make sure that when someone goes to your main page, it displays correctly.
-4. Deploy your project to Glitch, and fill in the appropriate fields in your package.json file.
-5. Ensure that your project has the proper naming scheme `a2-yourGithubUsername` so we can find it.
+4. Deploy your project to Render, and fill in the appropriate fields in your package.json file.
+5. Ensure that your project has the proper naming scheme `a2-yourFirstAndLastName` so we can find it.
 6. Modify the README to the specifications below, and delete all of the instructions originally found in this README.
 7. Create and submit a Pull Request to the original repo. Label the pull request as follows: a2-gitusername-firstname-lastname
 
