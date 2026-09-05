@@ -10,10 +10,8 @@
 <body>
     <div class="background">
         <img src="../../assets/grid.svg" id='gridImage' draggable="false" alt="">
-        <div class="game_elements">
-
-        </div>
     </div>
+    <canvas id="gameBoard" style="z-index:99;"></canvas>
     <div class="attack_menu" style='z-index: 99; position: absolute;'>
         <div class="firing_menu">
             <form id="firing_menu" action="/attack">
@@ -32,6 +30,7 @@
                 </fieldset>
                 <p id="remaining_munitions">Remaining Ammo: null</p>
                 <button type="submit" id="fire_button">FIRE</button>
+                <ul id="shots_display"></ul>
             </form>
             <button type="button" id="minimize_firing_menu_button"><</button>
         </div>

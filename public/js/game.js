@@ -8,6 +8,7 @@ let playerLocation = [];
 let enemies = [];
 let fireButton;
 let calculateButton;
+let squareSize;
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 let gridMap;
@@ -15,6 +16,9 @@ let display;
 let leftButton;
 let rightButton;
 let munitionsDisplay;
+let canvas;
+let gameBoard;
+let ctx;
 
 var leftIncreament;
 var rightIncreament;
@@ -41,20 +45,7 @@ window.onload = async function() {
     minimizeFiringMenuButton = document.getElementById('minimize_firing_menu_button');
     minimizeCalculatorMenuButton = document.getElementById('minimize_calculator_menu_button');
     calculateButton = document.getElementById('calculate_button');
-    const fire = async function( event ) {
-        // stop form submission from trying to load
-        // a new .html page for displaying results...
-        // this was the original browser behavior and still
-        // remains to this day
-        event.preventDefault()
-
-        if (remainingMunitions === 0) {
-            event.target.style.backgroundColor = 'red';
-        }else{
-            remainingMunitions-=1
-            updateMunitions();
-        }
-    }
+    canvas = document.getElementById('gameBoard');
     function toggleFiringMenu() {
         document.getElementById('firing_menu').classList.toggle('hidden');
         if (minimizeFiringMenuButton.innerText === '<') {
@@ -78,11 +69,19 @@ window.onload = async function() {
     });
     minimizeFiringMenuButton.onclick = toggleFiringMenu;
     minimizeCalculatorMenuButton.onclick = toggleCalculator;
-    fireButton.onclick = fire;
     offsetLeftGrid = gridMap.offsetLeft;
     offsetTopGrid = gridMap.offsetTop;
     height = gridMap.height;
     width = gridMap.width;
+    squareSize = height/13;
+    console.log("canvas: "+canvas)
+    console.log(offsetLeftGrid)
+    canvas.style.width = width+"px";
+    canvas.style.height = height+"px";
+    canvas.style.marginLeft = offsetLeftGrid+"px";
+    canvas.style.marginTop = offsetTopGrid+"px";
+    canvas.width = width;
+    canvas.height = height;
     console.log(offsetLeftGrid, offsetTopGrid);
     await fetch("/level1")
         .then(response => response.json()).then(res => {
@@ -138,7 +137,7 @@ window.onload = async function() {
         let angle = Math.asin((distance*gravity) / (explosive_force*explosive_force))/2;
         angle = angle * (180/Math.PI);
         console.log(angle)
-        document.getElementById('calculated_angle_output').innerText = "Calculated Angle Trajectory: "+angle;
+        document.getElementById('calculated_angle_output').innerText = "Calculated Angle Trajectory: "+angle.toFixed(2);
     }
     leftButton.onclick = (event) => {
         event.preventDefault();
@@ -184,6 +183,74 @@ window.onload = async function() {
         console.log("Mouse Up")
         clearInterval(increamentRight)
     }
+    gameBoard = document.getElementById('gameBoard');
+    ctx = canvas.getContext('2d');
+    function renderPlayerLocation() {
+        let x = playerLocation[0];
+        let y = playerLocation[1];
+        ctx.beginPath();
+        console.log(squareSize);
+        ctx.arc(
+            (squareSize*x)+(squareSize/2),           // center X
+            (squareSize*y)+(squareSize/2),           // center Y
+            (squareSize/2),       // radius
+            0,            // starting angle
+            Math.PI * 2   // ending angle
+        );
+        ctx.fillStyle = 'deepskyblue'; // Fill color
+        ctx.fill();
+    }
+    const fire = async function( event ) {
+        // stop form submission from trying to load
+        // a new .html page for displaying results...
+        // this was the original browser behavior and still
+        // remains to this day
+        event.preventDefault()
+
+        if (remainingMunitions === 0) {
+            event.target.style.backgroundColor = 'red';
+        }else{
+            remainingMunitions-=1
+            updateMunitions();
+            const explosivePower = getExplosivePower();
+            const bearing = bearingAngle.value;
+            const x = playerLocation[0];
+            const y = playerLocation[1];
+            const json = { explosivePower, bearing, x, y, squareSize};
+            const body = JSON.stringify( json );
+            let landX;
+            let landY;
+            let data;
+            const response = await fetch( '/attack', {
+                method:'POST',
+                body
+            })
+            const res = await response.json();
+            landX = res.newX;
+            landY = res.newY;
+            data = res.data;
+            ctx.beginPath();
+            console.log(squareSize);
+            ctx.arc(
+                landX,           // center X
+                landY,           // center Y
+                (squareSize/2),       // radius
+                0,            // starting angle
+                Math.PI * 2   // ending angle
+            );
+            ctx.fillStyle = 'red'; // Fill color
+            ctx.fill();
+            console.log(data);
+            document.getElementById('shots_display').innerHTML = "";
+            for (const entry of data) {
+                const li = document.createElement("li");
+                li.innerHTML = JSON.stringify(entry);
+                document.getElementById('shots_display').appendChild(li);
+            }
+        }
+    }
+    fireButton.onclick = fire;
+    renderPlayerLocation();
 }
 
 window.onresize = (event) => {
@@ -192,6 +259,11 @@ window.onresize = (event) => {
     offsetTopGrid = gridImage.offsetTop;
     height = gridImage.height;
     width = gridImage.width;
+    squareSize = height/13;
+    canvas.width = width;
+    canvas.height = height;
+    canvas.marginLeft = offsetLeftGrid;
+    canvas.marginTop = offsetTopGrid;
     console.log(offsetLeftGrid, offsetTopGrid);
 }
 
