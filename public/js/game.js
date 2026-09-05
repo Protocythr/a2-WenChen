@@ -2,27 +2,99 @@ let offsetLeftGrid = -1;
 let offsetRightGrid = -1;
 let height = -1;
 let width = -1;
-
-let gridMap;
+let remainingMunitions = -1;
+let remainingAbilities = -1;
+let playerLocation = [];
+let enemies = [];
+let fireButton;
+let calculateButton;
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+let gridMap;
 let display;
 let leftButton;
 let rightButton;
+let munitionsDisplay;
 
 var leftIncreament;
 var rightIncreament;
 
-window.onload = (event) => {
+let updateMunitions;
+
+function getExplosivePower() {
+    let value = 0;
+    document.querySelectorAll('input[name="explosive_strength"]').forEach(radio => {
+        if (radio.checked === true) {
+            value = radio.value;
+        }
+    });
+    return value;
+}
+
+window.onload = async function() {
     leftButton = document.getElementById('bearing_button_left');
     rightButton = document.getElementById('bearing_button_right');
     display = document.getElementById('bearing_angle_display');
     gridMap = document.getElementById("gridImage");
+    munitionsDisplay = document.getElementById("remaining_munitions");
+    fireButton = document.getElementById('fire_button');
+    minimizeFiringMenuButton = document.getElementById('minimize_firing_menu_button');
+    minimizeCalculatorMenuButton = document.getElementById('minimize_calculator_menu_button');
+    calculateButton = document.getElementById('calculate_button');
+    const fire = async function( event ) {
+        // stop form submission from trying to load
+        // a new .html page for displaying results...
+        // this was the original browser behavior and still
+        // remains to this day
+        event.preventDefault()
+
+        if (remainingMunitions === 0) {
+            event.target.style.backgroundColor = 'red';
+        }else{
+            remainingMunitions-=1
+            updateMunitions();
+        }
+    }
+    function toggleFiringMenu() {
+        document.getElementById('firing_menu').classList.toggle('hidden');
+        if (minimizeFiringMenuButton.innerText === '<') {
+            minimizeFiringMenuButton.innerText = '>'
+        }else{
+            minimizeFiringMenuButton.innerText = '<'
+        }
+    }
+    function toggleCalculator() {
+        document.getElementById('calculating_form').classList.toggle('hidden');
+        if (minimizeCalculatorMenuButton.innerText === '<') {
+            minimizeCalculatorMenuButton.innerText = '>'
+        }else{
+            minimizeCalculatorMenuButton.innerText = '<'
+        }
+    }
+    document.querySelectorAll('input[name="explosive_strength"]').forEach(radio => {
+        radio.addEventListener('change', function () {
+            getExplosivePower();
+        });
+    });
+    minimizeFiringMenuButton.onclick = toggleFiringMenu;
+    minimizeCalculatorMenuButton.onclick = toggleCalculator;
+    fireButton.onclick = fire;
     offsetLeftGrid = gridMap.offsetLeft;
     offsetTopGrid = gridMap.offsetTop;
     height = gridMap.height;
     width = gridMap.width;
     console.log(offsetLeftGrid, offsetTopGrid);
+    await fetch("/level1")
+        .then(response => response.json()).then(res => {
+            remainingMunitions = res.start_munitions;
+            remainingAbilities = res.ability_points;
+            enemies = res.enemy_positions;
+            playerLocation = res.player_location;
+            updateMunitions = function () {
+                munitionsDisplay.innerText = "Remaining Ammo: "+remainingMunitions;
+            }
+            updateMunitions();
+        })
     gridMap.addEventListener('click', (event) => {
         event.preventDefault();
 
@@ -39,11 +111,48 @@ window.onload = (event) => {
         const bearing = event.target.value;
         display.innerText = "Bearing Angle: "+bearing;
     }
+    calculateButton.onclick = (event) => {
+        event.preventDefault();
+        let currentExplosivePower = getExplosivePower();
+        console.log(currentExplosivePower)
+        let explosive_force = 0;
+        let distance = parseInt(document.getElementById('distance_input').value);
+        let gravity = 9.8
+        switch(currentExplosivePower) {
+            case '1':
+                explosive_force = 40;
+                break;
+            case '2':
+                explosive_force = 60;
+                break;
+            case '3':
+                explosive_force = 90;
+                break;
+            case '4':
+                explosive_force = 120;
+                break;
+            case '5':
+                explosive_force = 160;
+                break;
+        }
+        let angle = Math.asin((distance*gravity) / (explosive_force*explosive_force))/2;
+        angle = angle * (180/Math.PI);
+        console.log(angle)
+        document.getElementById('calculated_angle_output').innerText = "Calculated Angle Trajectory: "+angle;
+    }
     leftButton.onclick = (event) => {
         event.preventDefault();
     }
+    leftButton.onmouseleave = (event) => {
+        event.preventDefault();
+        clearInterval(increamentLeft)
+    }
     rightButton.onclick = (event) => {
         event.preventDefault();
+    }
+    rightButton.onmouseleave = (event) => {
+        event.preventDefault();
+        clearInterval(increamentRight)
     }
     leftButton.onmousedown = (event) => {
         event.preventDefault();

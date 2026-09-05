@@ -11,6 +11,8 @@ const appdata = [
   { 'name': 'DEV', 'score': 0, 'date':  '09/02/2026'},
 ]
 
+const level1 = {'start_munitions': 3, 'ability_points': 12, 'enemy_positions': [[3,2],[12,5],[6,7]], 'player_location': [9,7]};
+
 const server = http.createServer( function( request,response ) {
   if( request.method === 'GET' ) {
     handleGet( request, response )    
@@ -22,9 +24,13 @@ const server = http.createServer( function( request,response ) {
 const handleGet = function( request, response ) {
   const filename = dir + request.url.slice( 1 )
 
-    if (request.url === '/achievements') {
+  if (request.url === '/achievements') {
     response.writeHead(200, { 'Content-Type': 'application/json' });
     response.end(JSON.stringify(appdata));
+    return;
+  }else if (request.url === '/level1') {
+    response.writeHead(200, { 'Content-Type': 'application/json' });
+    response.end(JSON.stringify(level1));
     return;
   }
 
@@ -102,7 +108,7 @@ function calculateDistance (explosive_tier, angle) {
       explosive_force = 160;
   }
   let radians = angle * (Math.PI / 180)
-  return ((explosive_force * explosive_force) * Math.sin(radians)) / gravity;
+  return 2*((explosive_force * explosive_force) * Math.sin(2*radians)) / gravity;
 }
 
 server.listen( process.env.PORT || port )
